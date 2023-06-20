@@ -9,8 +9,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Product = () => {
     const navigation = useNavigation();
 
-    const [filteredCategory, setFilteredCategory] = useState(flowers);
+    const [filteredCategory, setFilteredCategory] = useState([]);
     const [flowerAlbum, setFlowerAlbum] = useState(flowers);
+    const [selectedCategory, setSelectedCategory] = useState('All');
 
     useEffect(() => {
         const saveFlowerStore = async () => {
@@ -30,6 +31,8 @@ const Product = () => {
                 const storeFlowers = await AsyncStorage.getItem('flowers');
                 if (storeFlowers) {
                     setFlowerAlbum(JSON.parse(storeFlowers));
+                } else {
+                    setFlowerAlbum(flowers);
                 }
             } catch (error) {
                 console.log('Error retrieving flowers from AsyncStorage:', error);
@@ -39,21 +42,20 @@ const Product = () => {
         getFlowerStore();
     }, []);
 
-    const handleFilterCategory = (category) => {
-        let filteredFlowers = flowers;
-        if (category !== 'All') {
-            filteredFlowers = flowers.filter((flower) => flower.category === category);
-        }
-
-        const updatedFilteredCategory = filteredFlowers.map((flower) => {
-            const existingFlower = flowerAlbum.find((item) => item.id === flower.id);
-            if (existingFlower) {
-                return { ...flower, favourite: existingFlower.favourite };
+    useEffect(() => {
+        const applyFilter = () => {
+            let filteredFlowers = flowerAlbum;
+            if (selectedCategory !== 'All') {
+                filteredFlowers = flowerAlbum.filter((flower) => flower.category === selectedCategory);
             }
-            return flower;
-        });
+            setFilteredCategory(filteredFlowers);
+        };
 
-        setFilteredCategory(updatedFilteredCategory);
+        applyFilter();
+    }, [flowerAlbum, selectedCategory]);
+
+    const handleFilterCategory = (category) => {
+        setSelectedCategory(category);
     };
 
     const handleFavourite = (flower) => {
@@ -63,9 +65,16 @@ const Product = () => {
             }
             return item;
         });
-        AsyncStorage.setItem('flowers', JSON.stringify(updatedFilteredCategory));
+
+        const updatedFlowerAlbum = flowerAlbum.map((item) => {
+            if (item.id === flower.id) {
+                return { ...item, favourite: !item.favourite };
+            }
+            return item;
+        });
+
         setFilteredCategory(updatedFilteredCategory);
-        setFlowerAlbum(updatedFilteredCategory);
+        setFlowerAlbum(updatedFlowerAlbum);
     };
 
     return (
