@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Button, Pressable, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import flowers from '../data';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -80,22 +79,28 @@ const FavouriteScreen = () => {
 
     return (
         <ScrollView style={styles.containerBtn}>
-            <TouchableOpacity style={styles.btn} onPress={clearWishlist}>
-                <MaterialIcons name="delete-sweep" size={27} color="red" />
-            </TouchableOpacity>
-
+            {wishlists.length > 0 ? (
+                <TouchableOpacity style={styles.btn} onPress={clearWishlist}>
+                    <MaterialIcons name="delete-sweep" size={27} color="red" />
+                </TouchableOpacity>
+            ) :
+                <></>}
             <View style={styles.container}>
-                {wishlists.map(wishlist => (
-                    (wishlist && wishlist.favourite === true) && (
-                        <TouchableOpacity style={styles.card} key={wishlist.id} onPress={() => { navigation.navigate('Detail', { flowerDetail: wishlist }) }} >
-                            <Pressable style={styles.iconContainer} onPress={() => handleFavourite(wishlist)}>
-                                <Ionicons name="heart" size={24} color='red' />
-                            </Pressable>
-                            <Image style={styles.image} source={wishlist.image} />
-                            <Text style={styles.text}>{wishlist.name}</Text>
-                        </TouchableOpacity>
-                    )
-                ))}
+                {wishlists.length > 0 ? (
+                    wishlists.map(wishlist => (
+                        (wishlist && wishlist.favourite === true) && (
+                            <TouchableOpacity style={styles.card} key={wishlist.id} onPress={() => { navigation.navigate('Detail', { flowerDetail: wishlist }) }} >
+                                <Pressable style={styles.iconContainer} onPress={() => handleFavourite(wishlist)}>
+                                    <Ionicons name="heart" size={24} color='red' />
+                                </Pressable>
+                                <Image style={styles.image} source={wishlist.image} />
+                                <Text style={styles.text}>{wishlist.name}</Text>
+                            </TouchableOpacity>
+                        )
+                    ))
+                ) : (
+                    <Text style={styles.noWishlistText}>Không có mục yêu thích</Text>
+                )}
             </View>
         </ScrollView>
     );
