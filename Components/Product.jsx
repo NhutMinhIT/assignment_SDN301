@@ -51,7 +51,6 @@ const Product = () => {
 
         saveFlowers();
     }, [flowerAlbum]);
-
     const applyFilter = (flowers, category) => {
         let filteredFlowers = flowers;
         if (category !== 'All') {
@@ -63,6 +62,13 @@ const Product = () => {
     useEffect(() => {
         applyFilter(flowerAlbum, selectedCategory);
     }, [selectedCategory, flowerAlbum]);
+
+
+    useFocusEffect(
+        React.useCallback(() => {
+            applyFilter(flowerAlbum, selectedCategory);
+        }, [flowerAlbum, selectedCategory])
+    );
 
     const handleFilterCategory = (category) => {
         setSelectedCategory(category);
@@ -78,7 +84,7 @@ const Product = () => {
         });
 
         setFlowerAlbum(updatedFlowerAlbum);
-        applyFilter(updatedFlowerAlbum, selectedCategory);
+        applyFilter(updatedFlowerAlbum, selectedCategory)
     };
 
     return (
