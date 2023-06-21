@@ -2,16 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import flowers from '../data';
 import { Ionicons } from 'react-native-vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import FilterCategory from './FilterCategory';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 const Product = () => {
+
     const navigation = useNavigation();
 
     const [filteredCategory, setFilteredCategory] = useState([]);
     const [flowerAlbum, setFlowerAlbum] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('All');
+
+    useFocusEffect(
+        React.useCallback(() => {
+            loadFlowers();
+        }, [])
+    );
 
     const loadFlowers = async () => {
         try {
