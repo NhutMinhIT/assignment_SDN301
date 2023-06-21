@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from 'react-native-vector-icons';
 import { TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -72,11 +71,7 @@ const DetailScreen = ({ route }) => {
             <View style={styles.container}>
                 <View style={styles.title}>
                     <Text style={styles.tilteDetail}>Flower Detail</Text>
-                    <TouchableOpacity>
-                        <Pressable>
-                            <MaterialIcons name="delete-sweep" size={27} color="red" />
-                        </Pressable>
-                    </TouchableOpacity>
+
                 </View>
                 <TouchableOpacity onPress={updateFavouriteStatus}>
                     {isFavourite === true ? (

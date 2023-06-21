@@ -60,6 +60,10 @@ const Product = () => {
         setFilteredCategory(filteredFlowers);
     };
 
+    useEffect(() => {
+        applyFilter(flowerAlbum, selectedCategory);
+    }, [selectedCategory, flowerAlbum]);
+
     const handleFilterCategory = (category) => {
         setSelectedCategory(category);
         applyFilter(flowerAlbum, category);
@@ -74,7 +78,7 @@ const Product = () => {
         });
 
         setFlowerAlbum(updatedFlowerAlbum);
-        applyFilter(updatedFlowerAlbum, selectedCategory)
+        applyFilter(updatedFlowerAlbum, selectedCategory);
     };
 
     return (
