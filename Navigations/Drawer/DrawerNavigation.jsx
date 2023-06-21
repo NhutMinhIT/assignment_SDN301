@@ -39,6 +39,7 @@ const DrawerNavigation = () => {
                     ),
                 }}
             />
+            <Drawer.Screen name='Setting' component={BottomNavigation} />
         </Drawer.Navigator>
     );
 };
