@@ -14,12 +14,7 @@ const Product = () => {
     const [flowerAlbum, setFlowerAlbum] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('All');
 
-    useFocusEffect(
-        React.useCallback(() => {
-            loadFlowers();
-        }, [])
-    );
-
+    // Get Data -----------------
     const loadFlowers = async () => {
         try {
             const storedFlowers = await AsyncStorage.getItem('flowers');
@@ -39,7 +34,12 @@ const Product = () => {
     useEffect(() => {
         loadFlowers();
     }, []);
-
+    useFocusEffect(
+        React.useCallback(() => {
+            loadFlowers();
+        }, [])
+    );
+    // -----------------------------------Save
     useEffect(() => {
         const saveFlowers = async () => {
             try {
@@ -48,9 +48,10 @@ const Product = () => {
                 console.log('Error saving flowers to AsyncStorage:', error);
             }
         };
-
         saveFlowers();
     }, [flowerAlbum]);
+
+    //Lọc mảng
     const applyFilter = (flowers, category) => {
         let filteredFlowers = flowers;
         if (category !== 'All') {
@@ -63,7 +64,6 @@ const Product = () => {
         applyFilter(flowerAlbum, selectedCategory);
     }, [selectedCategory, flowerAlbum]);
 
-
     useFocusEffect(
         React.useCallback(() => {
             applyFilter(flowerAlbum, selectedCategory);
@@ -75,6 +75,7 @@ const Product = () => {
         applyFilter(flowerAlbum, category);
     };
 
+    // Handle Favourite
     const handleFavourite = (flower) => {
         const updatedFlowerAlbum = flowerAlbum.map((item) => {
             if (item.id === flower.id) {
